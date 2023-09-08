@@ -26,7 +26,7 @@ class Cpu {
         mapForRegister.put("r9", null);
         mapForRegister.put("r10", null);
         ReadFromFile(path);
-        if(SyntaxTest()){
+        if(SyntaxAnalys()){
             System.out.println("sax lava");
         }
         else {
@@ -94,7 +94,7 @@ class Cpu {
     }
 
 
-    public boolean SyntaxTest() {
+    public boolean SyntaxAnalys() {
        boolean flag = true;
 
         for (Map.Entry<Integer, String> entry : mapForLineClean.entrySet()) {
@@ -191,11 +191,11 @@ class Cpu {
         return false;
 
     }
-
-    public void Test(String line) {
-        System.out.println(operandTwoIsRegisterOrNo(line));
-
+    public void Run(){
+        return RunHlepr
     }
+
+
 
  /*  public void TestMapLine() {
 
