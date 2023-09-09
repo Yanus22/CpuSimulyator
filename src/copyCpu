@@ -1,0 +1,232 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.net.Inet4Address;
+import java.util.HashMap;
+import java.util.Map;
+
+class Cpu {
+    //private  char [] arrForSyntaxeror = {'!','@','#','$','%','^','&','*','(',')','_','-','=','q',};
+    public Map<Integer, String> mapForLine = new HashMap<>();
+    public Map<String, Integer> mapForLabel = new HashMap<>();
+    public Map<String, Register> mapForRegister = new HashMap<>();
+    public Map<Integer, String> mapForLineClean = new HashMap<>();
+
+
+    Cpu(String path) {
+        mapForRegister.put("r0", new Register("r0",null));
+        mapForRegister.put("r1", new Register("r1",null));
+        mapForRegister.put("r2", new Register("r2",null));
+        mapForRegister.put("r3", new Register("r3",null));
+        mapForRegister.put("r4", new Register("r4",null));
+        mapForRegister.put("r5", new Register("r5",null));
+        mapForRegister.put("r6", new Register("r6",null));
+        mapForRegister.put("r7", new Register("r7",null));
+        mapForRegister.put("r8", new Register("r8",null));
+        mapForRegister.put("r9", new Register("r9",null));
+        mapForRegister.put("r10", new Register("r10",null));
+
+
+        ReadFromFile(path);
+        if (SyntaxAnalys()) {
+            System.out.println("sax lava");
+        } else {
+            System.out.println("syntax eroor");
+        }
+
+
+    }
+
+    public void ReadFromFile(String path) {
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader(path));
+            String line;
+            int lineIndex = 0;
+            while ((line = reader.readLine()) != null) {
+                mapForLine.put(lineIndex, RemoveWhiteSpace(line));
+                ++lineIndex;
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.out.println("kardalu xndir");
+        }
+        Label();
+        mapForLine.forEach((index, line) -> {
+            if (IsLabelOrNO(line)) {
+                mapForLineClean.put(index, line.substring(line.indexOf(';') + 1));
+            } else {
+                mapForLineClean.put(index, line);
+            }
+        });
+    }
+
+    private String RemoveWhiteSpace(String str) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) != ' ') {
+                result.append(str.charAt(i));
+            }
+        }
+        return result.toString();
+    }
+
+    private boolean IsLabelOrNO(String str) {
+
+        boolean result = false;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == ';' && i != 0) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    private void Label() {
+        mapForLine.forEach((indexLine, line) -> {
+
+            if (IsLabelOrNO(line)) {
+
+                String lineResult;
+                lineResult = line.substring(0, line.indexOf(';'));
+                mapForLabel.put(lineResult, indexLine);
+            }
+        });
+    }
+
+
+
+    private void Run() {
+        for (Map.Entry<Integer, String> entry : mapForLine.entrySet()) {
+                Integer index  = entry.getKey();
+                String line  = entry.getValue();
+                if(IsLabelOrNO(line)) {
+                    String instruction = line.substring()
+                }
+        }
+    }
+
+    void Mov(String register, String operand) {
+        if (OperandIsRegisterOrNO(register) && operand.length() != 0) {
+            int result = (int) Float.parseFloat(operand);
+            mapForRegister.put(register, result);
+        } else {
+            System.out.println("movi mej xmdir ka");
+        }
+    }
+
+    void Add(String register, String operand) {
+        AddSub(register, operand, true);
+    }
+
+    void Sub(String register, String operand) {
+        AddSub(register, operand, false);
+    }
+
+    void Mul(String register, String operand) {
+        MulDiv(register, operand, true);
+    }
+
+    void Div(String register, String operand) {
+        MulDiv(register, operand, false);
+    }
+
+    void Increment(String register) {
+        if (OperandIsRegisterOrNO(register) && (mapForRegister.get(register) != null)) {
+            int value = mapForRegister.get(register);
+            value++;
+            mapForRegister.put(register, value);
+        } else {
+            System.out.println("problem for operand");
+            throw new ArithmeticException();
+        }
+    }
+
+    void Decrement(String register) {
+        if (OperandIsRegisterOrNO(register) && (mapForRegister.get(register) != null)) {
+            int value = mapForRegister.get(register);
+            value--;
+            mapForRegister.put(register, value);
+        } else {
+            System.out.println("problem for decrement ");
+            throw new ArithmeticException();
+        }
+    }
+
+    int Compear(String register, String operand) {
+        int result = AddSub(register, operand, false);
+        return result;
+    }
+
+
+    private void MulDiv(String register, String operand, boolean mul) {
+        if (mul) {
+            if (OperandIsRegisterOrNO(register) && (mapForRegister.get(register) != null)) {
+                if (OperandIsRegisterOrNO(operand) && (mapForRegister.get(operand) != null)) {
+                    int result = mapForRegister.get(register) * mapForRegister.get(operand);
+                    mapForRegister.put(register, result);
+                } else if (OperandIsNumberOrNo(operand)) {
+                    int result = mapForRegister.get(register) * (int) Float.parseFloat(operand);
+                    mapForRegister.put(register, result);
+                } else {
+                    throw new ArithmeticException("exception second operand ");
+                }
+            } else {
+                throw new ArithmeticException("exception first operand");
+            }
+        } else {
+            if (OperandIsRegisterOrNO(register) && (mapForRegister.get(register) != null)) {
+                if (OperandIsRegisterOrNO(operand) && (mapForRegister.get(operand) != null && mapForRegister.get(operand) != 0)) {
+                    int result = mapForRegister.get(register) / mapForRegister.get(operand);
+                    mapForRegister.put(register, result);
+                } else if (OperandIsNumberOrNo(operand)) {
+                    int operandValue = (int) Float.parseFloat(operand);
+                    if (operandValue == 0) {
+                        throw new ArithmeticException("You dont can div for 0");
+                    }
+                    int result = mapForRegister.get(register) / operandValue;
+                    mapForRegister.put(register, result);
+                } else {
+                    throw new ArithmeticException("exception second operand");
+                }
+            } else {
+                throw new ArithmeticException("exception first operand");
+            }
+        }
+
+    }
+
+
+    private int AddSub(String register, String operand, boolean plyus) {
+        int result = 0;
+        if (plyus) {
+            if (OperandIsRegisterOrNO(register) && (mapForRegister.get(register) != null)) {
+                if (OperandIsRegisterOrNO(operand) && (mapForRegister.get(operand) != null)) {
+                    result = mapForRegister.get(register) + mapForRegister.get(operand);
+                    mapForRegister.put(register, result);
+                } else if (OperandIsNumberOrNo(operand)) {
+                    result = mapForRegister.get(register) + (int) Float.parseFloat(operand);
+                    mapForRegister.put(register, result);
+                } else {
+                    throw new ArithmeticException("exception second operand ");
+                }
+            } else {
+                throw new ArithmeticException("exception first operand");
+            }
+        } else {
+            if (OperandIsRegisterOrNO(register) && (mapForRegister.get(register) != null)) {
+                if (OperandIsRegisterOrNO(operand) && (mapForRegister.get(operand) != null)) {
+                    result = mapForRegister.get(register) - mapForRegister.get(operand);
+                    mapForRegister.put(register, result);
+                } else if (OperandIsNumberOrNo(operand)) {
+                    result = mapForRegister.get(register) - (int) Float.parseFloat(operand);
+                    mapForRegister.put(register, result);
+                } else {
+                    throw new ArithmeticException("exception second operand ");
+                }
+            } else {
+                throw new ArithmeticException("exception first operand");
+            }
+        }
+        return result;
+    }

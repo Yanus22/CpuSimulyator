@@ -1,3 +1,4 @@
 mov  r1,88
 add  r3,17
-subl r8, 88
+sub r8, 88
+l1;mov r8,17
