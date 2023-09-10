@@ -9,11 +9,12 @@ public class CompilerSyntax {
     private Map<String, Register> mapForRegister;
     private Map<Integer, String> mapForLineClean;
 
-    public CompilerSyntax(Map<Integer, String> mapForLine, Map<String, Integer> mapForLabel, Map<String, Register> mapForRegister, Map<Integer, String> mapForLineClean) {
+    public CompilerSyntax(Map<Integer, String> mapForLine, Map<String, Integer> mapForLabel, Map<String, Register> mapForRegister, Map<Integer, String> mapForLineClean, String path) {
         this.mapForLabel = mapForLabel;
         this.mapForLineClean = mapForLineClean;
         this.mapForLine = mapForLine;
         this.mapForRegister = mapForRegister;
+        ReadFromFile(path);
     }
 
     public boolean SyntaxAnalys() {
@@ -22,28 +23,31 @@ public class CompilerSyntax {
         for (Map.Entry<Integer, String> entry : mapForLineClean.entrySet()) {
             Integer index = entry.getKey();
             String line = entry.getValue();
-            String lineForInstruction = line.substring(0, line.indexOf('r'));
+            if(line.startsWith("inc") || line.startsWith("dec")){
+                continue;
+            }
+            String lineForInstruction = line.substring(0, 3);
+            String lineForInstructionJumps = line.substring(0, 4);
             if (In3CharInstruction(lineForInstruction)) {
-                System.out.println("this is line for intstruction  " + lineForInstruction);/////
-                String lineForFirstRefister = line.substring(3, 5);
-
-                if (OperandIsRegisterOrNO(lineForFirstRefister)) {
-                    System.out.println("this is line for register   " + lineForFirstRefister);/////
-                    String lineFor2Operand = line.substring(6);
-
-                    if (line.charAt(5) == ',') {
+                String lineForFirstRegister = line.substring(3, line.indexOf(','));
+                if (OperandIsRegisterOrNO(lineForFirstRegister)) {
+                    String lineFor2Operand = line.substring(line.indexOf(',') + 1);
+                    if (line.charAt(5) == ',' || (line.charAt(5) == '0' && line.charAt(6) == ',')) {
                         if (OperandIsNumberOrNo(lineFor2Operand) || OperandIsRegisterOrNO(lineFor2Operand)) {
-                            System.out.println("line for  2 opernd    " + lineFor2Operand);
                             flag = true;
                         } else return false;////// erkrodoperad if
                     } else return false;// storaket if
                 } else return false;// arajin operand if
-            } else if (In4CharInstruction(lineForInstruction)) {
+            } else if (In4CharInstruction(lineForInstructionJumps)) {
                 String lineWithLine = mapForLine.get(index);
-                lineWithLine = lineWithLine.substring(lineWithLine.indexOf(';'));
+                lineWithLine = lineWithLine.substring(lineWithLine.indexOf(';') + 1);
                 if (lineWithLine.charAt(0) > 96 && lineWithLine.charAt(0) < 123) {
                     flag = true;
                 } else return false;
+            } else if (line.startsWith("print")) {
+                if (OperandIsRegisterOrNO(line.substring(line.indexOf('t') + 1))) {
+                    flag = true;
+                }
             } else return false;
         }
         return flag;
@@ -94,6 +98,7 @@ public class CompilerSyntax {
         return false;
 
     }
+
     public void ReadFromFile(String path) {
         BufferedReader reader;
         try {

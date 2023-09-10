@@ -13,9 +13,8 @@ class Cpu {
     public Map<String, Register> mapForRegister = new HashMap<>();
     public Map<Integer, String> mapForLineClean = new HashMap<>();
 
-    public  CU Cu;
+    public CU Cu;
     public CompilerSyntax Compiler;
-    //  Alu Alu;
 
 
     Cpu(String path) {
@@ -30,16 +29,24 @@ class Cpu {
         mapForRegister.put("r8", new Register("r8", null));
         mapForRegister.put("r9", new Register("r9", null));
         mapForRegister.put("r10", new Register("r10", null));
-        Cu = new CU(mapForLine, mapForLabel, mapForRegister, mapForLineClean);
-        Compiler = new CompilerSyntax(mapForLine, mapForLabel, mapForRegister, mapForLineClean);
-
-        // Alu  =new Alu();
-        Compiler.ReadFromFile(path);
-
-
-
-
+        Cu = new CU(mapForLine, mapForLabel, mapForRegister, mapForLineClean, path);
+        Compiler = new CompilerSyntax(mapForLine, mapForLabel, mapForRegister, mapForLineClean, path);
+        if(Compiler.SyntaxAnalys()){
+            System.out.println("code can run");
+        }
     }
+
+    public void Run() {
+         int index =  0;
+         String lineStart = mapForLineClean.get(0);
+         if(index  == mapForLineClean.size()-2){
+                    return;
+    }
+         else {
+             Cu.Instruction(lineStart,index);
+         }
+    }
+
 }
 
 

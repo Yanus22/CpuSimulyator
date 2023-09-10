@@ -1,4 +1,9 @@
-mov  r1,88
-add  r3,17
-sub r8, 88
-l1;mov r8,17
+mov r10,88
+mov r2,102
+add r10,100
+cmp r2,102
+jmpe l1
+inc r10
+l1;print r10
+mov r10,555
+print r10
