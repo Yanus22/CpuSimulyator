@@ -3,14 +3,14 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 
- class CompilerSyntax    //syntaxner@ stugox class
+ public  class CompilerSyntax    //syntaxner@ stugox class
  {
     private Map<Integer, String> mapForLine;
     private Map<String, Integer> mapForLabel;
     private Map<String, Register> mapForRegister;
     private Map<Integer, String> mapForLineClean;
 
-     CompilerSyntax(Map<Integer, String> mapForLine, Map<String, Integer> mapForLabel, Map<String, Register> mapForRegister, Map<Integer, String> mapForLineClean, String path) {
+     CompilerSyntax ( Map<Integer, String> mapForLine, Map<String, Integer> mapForLabel, Map<String, Register> mapForRegister, Map<Integer, String> mapForLineClean, String path) {
         this.mapForLabel = mapForLabel;
         this.mapForLineClean = mapForLineClean;
         this.mapForLine = mapForLine;

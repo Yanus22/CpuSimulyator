@@ -6,7 +6,7 @@ import java.net.Inet4Address;
 import java.util.HashMap;
 import java.util.Map;
 
-class Cpu
+public  class Cpu
 {
     private Map<Integer, String> mapForLine = new HashMap<>();
     private Map<String, Integer> mapForLabel = new HashMap<>();
@@ -47,13 +47,13 @@ class Cpu
         int index =  0;//skselu index@ toxi
          String lineStart = mapForLineClean.get(0); //skselu tox@
         if(index == mapForLineClean.size()-1)
-        {
+            {
             return;
         }
         else
-        {
+            {
              Cu.Instruction(lineStart,index);
-    }
+        }
     }
 }
 
