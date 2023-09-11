@@ -6,15 +6,18 @@ import java.net.Inet4Address;
 import java.util.HashMap;
 import java.util.Map;
 
-class Cpu {
-    //private  char [] arrForSyntaxeror = {'!','@','#','$','%','^','&','*','(',')','_','-','=','q',};
-    public Map<Integer, String> mapForLine = new HashMap<>();
-    public Map<String, Integer> mapForLabel = new HashMap<>();
-    public Map<String, Register> mapForRegister = new HashMap<>();
-    public Map<Integer, String> mapForLineClean = new HashMap<>();
+class Cpu
+{
+    private Map<Integer, String> mapForLine = new HashMap<>();
+    private Map<String, Integer> mapForLabel = new HashMap<>();
 
-    public CU Cu;
-    public CompilerSyntax Compiler;
+    private Map<String, Register> mapForRegister = new HashMap<>();
+
+    private Map<Integer, String> mapForLineClean = new HashMap<>();
+
+
+    private CU Cu;
+    private CompilerSyntax Compiler;
 
 
     Cpu(String path) {
@@ -28,25 +31,30 @@ class Cpu {
         mapForRegister.put("r7", new Register("r7", null));
         mapForRegister.put("r8", new Register("r8", null));
         mapForRegister.put("r9", new Register("r9", null));
-        mapForRegister.put("r10", new Register("r10", null));
-        Cu = new CU(mapForLine, mapForLabel, mapForRegister, mapForLineClean, path);
-        Compiler = new CompilerSyntax(mapForLine, mapForLabel, mapForRegister, mapForLineClean, path);
-        if(Compiler.SyntaxAnalys()){
+        mapForRegister.put("r10", new Register("r10", null));//cpun sarqeluc sax nullera lcum vor heto chisht hamematutyuner ani
+        Compiler = new CompilerSyntax(mapForLine, mapForLabel, mapForRegister, mapForLineClean, path); //nuyn dzev compiler@ iran petqa  maper@
+        Cu = new CU(mapForLine, mapForLabel, mapForRegister, mapForLineClean, path,Compiler);//  maperi referencner@ talisenk vor  CUnel ogtagorci pathnel vor CUn compile ani
+        if ( Compiler.SyntaxAnalys () ) // stugel Syntax@ chishta te che  SyntaxAnalys@ exceptiona qcum sxal syntaxi jamanak
+        {
             System.out.println("code can run");
+        } else {
+            throw new ILegealOperandException("Compile time eroor");
         }
     }
 
-    public void Run() {
-         int index =  0;
-         String lineStart = mapForLineClean.get(0);
-         if(index  == mapForLineClean.size()-2){
-                    return;
-    }
-         else {
+    public void Run()
+    {
+        int index =  0;//skselu index@ toxi
+         String lineStart = mapForLineClean.get(0); //skselu tox@
+        if(index == mapForLineClean.size()-1)
+        {
+            return;
+        }
+        else
+        {
              Cu.Instruction(lineStart,index);
-         }
     }
-
+    }
 }
 
 
