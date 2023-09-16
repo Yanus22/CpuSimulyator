@@ -14,6 +14,7 @@ public  class Cpu
     private Map<String, Register> mapForRegister = new HashMap<>();
 
     private Map<Integer, String> mapForLineClean = new HashMap<>();
+    // mapForLineClean,MapForRegister , mapForLine  and mapFor label  have all classes
 
 
     private CU Cu;
@@ -31,8 +32,8 @@ public  class Cpu
         mapForRegister.put("r7", new Register("r7", null));
         mapForRegister.put("r8", new Register("r8", null));
         mapForRegister.put("r9", new Register("r9", null));
-        mapForRegister.put("r10", new Register("r10", null));//cpun sarqeluc sax nullera lcum vor heto chisht hamematutyuner ani
-        Compiler = new CompilerSyntax(mapForLine, mapForLabel, mapForRegister, mapForLineClean, path); //nuyn dzev compiler@ iran petqa  maper@
+        mapForRegister.put("r10", new Register("r10", null));
+        Compiler = new CompilerSyntax(mapForLine, mapForLabel, mapForRegister, mapForLineClean, path); //
         Cu = new CU(mapForLine, mapForLabel, mapForRegister, mapForLineClean, path,Compiler);//  maperi referencner@ talisenk vor  CUnel ogtagorci pathnel vor CUn compile ani
         if ( Compiler.SyntaxAnalys () ) // stugel Syntax@ chishta te che  SyntaxAnalys@ exceptiona qcum sxal syntaxi jamanak
         {

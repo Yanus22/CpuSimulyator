@@ -21,18 +21,18 @@ public  class CU {
         Alu = new ALU(mapForLine, mapForLabel, mapForRegister, mapForLineClean);
     }
 
-    public void Instruction(String line, int index) {// amen angam  inq@ irana kanchum hamapatsxan toxov yev toxi indexov
+    public void Instruction(String line, int index) {// this Function is recursion for Fetch line in map and decode  Instruction  and call Instruction for funkction for next line
         if ( line == null) {
             return;
         }
-        int indexNext = index + 1;//verncuma hajord toxi index@
-        String lineNext = mapForLineClean.get( indexNext );//maqur toxeri mapic vercnuma hajord  tox@
+        int indexNext = index + 1;//next line index
+        String lineNext = mapForLineClean.get( indexNext );//mapForlineClean get nextLine
         String instruction3Char = line.substring( 0, 3);
         String intruction4Char = line.substring( 0, 4);
         String instructionPrint = line.substring( 0, 5);
-        if (CompilerSyntax.In3CharInstruction(instruction3Char) && !(instruction3Char.equals("inc") || instruction3Char.equals("dec")))// iranc logikan urish ddzeva incrrementi u decrementi
+        if (CompilerSyntax.In3CharInstruction(instruction3Char) && !(instruction3Char.equals("inc") || instruction3Char.equals("dec")))// they logition is another
         {
-            String operand1 = line.substring ( 3, line.indexOf(','));//instruckcyayi arajin operand
+            String operand1 = line.substring ( 3, line.indexOf(','));//first operand Instruction
             String operand2 = line.substring(line.indexOf (',') + 1);
 
             switch (instruction3Char) {
@@ -74,14 +74,15 @@ public  class CU {
         {
             Alu.Print(line.substring(line.indexOf('t') + 1));
         }
-        else if (CompilerSyntax.In4CharInstruction( intruction4Char) ){ // es blockum stugum a  te vor jumpn a uzum , u ira naxord tox@ vercnuma tena cmpear ka te che   heto cmpeari ardyunq@ hamematum a paymanov jumpin tenuma yete ham@nkel en poxuma hajord  katarvox tox@ u     index@
+        else if (CompilerSyntax.In4CharInstruction( intruction4Char) ){ // this  block for jumps Instruction and its block logition  for Instruction and so on
+            //
             String prveLine = mapForLineClean.get( index-1 );
             if( prveLine.startsWith("cmp") )
             {
                 String  register =  prveLine.substring( 3,prveLine.indexOf(','));
                 String operand = prveLine.substring( prveLine.indexOf(',')+1);
                 int result = Alu.Compear( register, operand);
-                String  label = line.substring(4);//erkarutyun@ 4 a paymanov jmperi
+                String  label = line.substring(4);//length for 4  jumps
                 if( line.startsWith("jmpe") && ( result == 0) )
                 {
                       indexNext =   mapForLabel.get( label);
@@ -104,9 +105,9 @@ public  class CU {
           throw new ILegealOperandException("i dont know excpetio");
         }
         if( indexNext == mapForLineClean.size() ) return;
-        Instruction(lineNext,indexNext);//nuyn funkcyan kanchum a hamapatasxan toxov vodex ktorner@ bajanvuma  u alui hamapatasxan  instrukcyan kanchum
+        Instruction(lineNext,indexNext);//call Function nextLine and nextIndex
     }
-    private  void InstructionForJumps ( String jumpIf,String linForNow,int indexForNow) // shtkumneri kariq uni es funkcyan yev chi ogtagorcvel
+    /*private  void InstructionForJumps ( String jumpIf,String linForNow,int indexForNow) // shtkumneri kariq uni es funkcyan yev chi ogtagorcvel
     {
         int indexNext = indexForNow +1;
         String lineNext  = mapForLineClean.get( indexForNow+1 );
@@ -147,7 +148,7 @@ public  class CU {
             {
                 throw new ILegealOperandException("label not found");
             }
-    }
+    }*/
 }
 
 

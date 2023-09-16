@@ -1,6 +1,6 @@
 import java.util.Map;
 
-public class ALU {
+public class ALU { // this class for Arithmetic instruction
 
     public Map<Integer, String> mapForLine;
     public Map<String, Integer> mapForLabel;
@@ -141,7 +141,7 @@ public class ALU {
     }
 
 
-    public void AndOrrXor(String register, String operand, String bitIntsruction)
+    private void AndOrrXor(String register, String operand, String bitIntsruction)//check operand and execute instruction
     {
         if (OperandIsRegisterOrNO(register) && (mapForRegister.get(register).getValue() != null))
         {
@@ -180,7 +180,7 @@ public class ALU {
         }
 
     }
-    private void MulDiv(String register, String operand, boolean mul)
+    private void MulDiv(String register, String operand, boolean mul)//MulDive method
     {
         if (mul) {
             if (OperandIsRegisterOrNO(register) && (mapForRegister.get(register) != null))
@@ -248,7 +248,7 @@ public class ALU {
     }
 
 
-    private int AddSub(String register, String operand, boolean plyus) {  // stugel elementneri chisht linel@  te che nuller chlinen
+    private int AddSub(String register, String operand, boolean plyus) {  // check operand and   execude instruction
         int result = 0;
         if (plyus)
         {
@@ -339,7 +339,7 @@ public class ALU {
             else if (chr < 48 || chr > 57)
             {
                 return false;
-            } // ascii hamapatasxcan tara kam tiv
+            } // for ascii check its number or no
         }
         return true;
     }

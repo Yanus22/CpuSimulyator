@@ -3,24 +3,24 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 
- public  class CompilerSyntax    //syntaxner@ stugox class
+ public  class CompilerSyntax    //SYtnax check class
  {
     private Map<Integer, String> mapForLine;
-    private Map<String, Integer> mapForLabel;
-    private Map<String, Register> mapForRegister;
-    private Map<Integer, String> mapForLineClean;
+    private Map<String, Integer> mapForLabel;//map for label name and her line number
+    private Map<String, Register> mapForRegister;//map for register
+    private Map<Integer, String> mapForLineClean;//map for without label
 
      CompilerSyntax ( Map<Integer, String> mapForLine, Map<String, Integer> mapForLabel, Map<String, Register> mapForRegister, Map<Integer, String> mapForLineClean, String path) {
         this.mapForLabel = mapForLabel;
         this.mapForLineClean = mapForLineClean;
         this.mapForLine = mapForLine;
         this.mapForRegister = mapForRegister;
-        ReadFromFile(path);  //karduma text@ yev gcum hamapatasxan maper
-         Label();//labelner@ qcuma tex@
+        ReadFromFile(path);  //read text
+         Label();//which line is label push label name and her Number line
 
     }
 
-    public boolean SyntaxAnalys()    //stugox funkcyan syntaxi
+    public boolean SyntaxAnalys()    //Syntax analays
     {
         boolean flag = true;
 
@@ -34,25 +34,25 @@ import java.util.Map;
 
             String lineForInstruction = line.substring(0, 3);
             String lineForInstructionJumps = line.substring(0, 4);
-            if (In3CharInstruction(lineForInstruction))//stugel 3 charanoc instrukcyay te che
+            if (In3CharInstruction(lineForInstruction))//chek instruction is  3 char or no
             {
                 String lineForFirstRegister = line.substring(3, line.indexOf(','));
-                if (OperandIsRegisterOrNO(lineForFirstRegister))//stugel registera te che
+                if (OperandIsRegisterOrNO(lineForFirstRegister))//check operand 1 is rgister or no
                 {
                     String lineFor2Operand = line.substring(line.indexOf(',') + 1);
-                    if (line.charAt(5) == ',' || (line.charAt(5) == '0' && line.charAt(6) == ',')) // stroaketic heto astugumner@
+                    if (line.charAt(5) == ',' || (line.charAt(5) == '0' && line.charAt(6) == ',')) // chek operand 2
                     {
                         if (OperandIsNumberOrNo(lineFor2Operand) || OperandIsRegisterOrNO(lineFor2Operand))
                         {
                             flag = true;
                         }
-                        else return false;////// erkrodoperad if
+                        else return false;
                     }
-                    else return false;// storaket if
+                    else return false;// ','  ->    if
                 }
-                else return false;// arajin operand if
+                else return false;// first operand  -> if
             }
-            else if (In4CharInstruction(lineForInstructionJumps))//jumperi intsrucyaneri stugum
+            else if (In4CharInstruction(lineForInstructionJumps))//chek instruction for jumps
             {
                 String lineWithLine = mapForLine.get(index);
                 lineWithLine = lineWithLine.substring(lineWithLine.indexOf(';') + 1);
@@ -62,7 +62,7 @@ import java.util.Map;
                 }
                 else return false;
             }
-            else if (line.startsWith("print"))//printi stugum
+            else if (line.startsWith("print"))
             {
                 if (OperandIsRegisterOrNO(line.substring(line.indexOf('t') + 1)))
                 {
@@ -75,7 +75,7 @@ import java.util.Map;
     }
 
 
-    private boolean OperandIsRegisterOrNO(String line)//stugugma trvac@ registera te che
+    private boolean OperandIsRegisterOrNO(String line)// check line is register or no
     {
         if (line.length() == 2)
         {
@@ -93,18 +93,18 @@ import java.util.Map;
     }
 
 
-    private boolean OperandIsNumberOrNo(String line) {//stuguma operand@ tiva te mej@ simvol ka  kam urish ban
+    private boolean OperandIsNumberOrNo(String line) {// check operand 2 is number or no
 
         for (int i = 0; i < line.length(); i++)
         {
             int chr = line.charAt(i);
-            if (chr == 46) {
+            if (chr == 46) {//. for float
                 continue;
             }
             else if (chr < 48 || chr > 57)
             {
                 return false;
-            } // ascii hamapatasxcan tara kam tiv
+            } // asci number value
         }
         return true;
     }
@@ -119,7 +119,7 @@ import java.util.Map;
         return false;
     }
 
-    static boolean In4CharInstruction(String line)//stuguma 4 charanuoc instrukcya  te che
+    static boolean In4CharInstruction(String line)//check instruction in 4 char
     {
         if (line.equals("jmpe") || line.equals("jmpl") || line.equals("jmpg")){
             return true;
@@ -128,7 +128,7 @@ import java.util.Map;
 
     }
 
-    public void ReadFromFile(String path)//kardalu @ntacqum maqruma labelic toxer@ u arandzin map qcum  mi hat el labelnerovna qcum map
+    public void ReadFromFile(String path)//read and push mapLine line and number  ,and  mapForLineClean  push cleand map
     {
         BufferedReader reader;
         try {
@@ -142,7 +142,7 @@ import java.util.Map;
             reader.close();
         }
         catch (Exception e) {
-            System.out.println("kardalu xndir");
+            System.out.println("Java problem for read");
         }
         mapForLine.forEach((index, line) -> {
             if (IsLabelOrNO(line))
@@ -156,7 +156,7 @@ import java.util.Map;
         });
 
     }
-    public String RemoveWhiteSpace(String str) { //white spacneri veracum
+    public String RemoveWhiteSpace(String str) { // whit space remove
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < str.length(); i++)
         {
@@ -168,7 +168,7 @@ import java.util.Map;
         return result.toString();
     }
 
-    static boolean IsLabelOrNO(String str) // suguma label a te che tvyal tox@
+    static boolean IsLabelOrNO(String str) //check it label or no
     {
         boolean result = false;
         for (int i = 0; i < str.length(); i++)
@@ -181,7 +181,7 @@ import java.util.Map;
         return result;
     }
 
-    public void Label() { // bolor labelner@ gcuma labeliMapi mej
+    public void Label() { //all labels add mapForLabel
         mapForLine.forEach((indexLine, line) -> {
             if (IsLabelOrNO(line))
             {
