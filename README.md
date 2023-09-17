@@ -139,5 +139,9 @@ Instruction Method
     Description:
         Executes the provided instruction, updates registers, and handles control flow based on conditional jumps.
         Recursively calls itself for the next instruction until the end of the code is reached.
-
-
+  
+for run code need creat Cpu and give her path for txt file where writed Asmbly  code if everythin is okay you will see mesaeg code can run 
+they you can call cpu.ran() and asmbly code run  for example
+Cpu cpu = new Cpu(path txt file);
+and then cpu.run()
+  

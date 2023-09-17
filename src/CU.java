@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Map;
 
-public  class CU {
+public  class CU { // Cu class for decode Instruction and call Function in Alu
     private Map<Integer, String> mapForLine;
     private Map<String, Integer> mapForLabel;
     private Map<String, Register> mapForRegister;

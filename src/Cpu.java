@@ -6,7 +6,7 @@ import java.net.Inet4Address;
 import java.util.HashMap;
 import java.util.Map;
 
-public  class Cpu
+public  class Cpu // Cpu class
 {
     private Map<Integer, String> mapForLine = new HashMap<>();
     private Map<String, Integer> mapForLabel = new HashMap<>();

@@ -3,6 +3,6 @@ mov r2,87
 cmp r1,r2
 jmpg l1
 mov r1,12
-mov r3,11111
-print r3
+mov r3,1nh1111
+print r1
 l1;print r1
